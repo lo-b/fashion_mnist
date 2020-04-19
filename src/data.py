@@ -27,9 +27,9 @@ print('Number of test images:', len(test_data))
 # Make DataLoaders where we define our batch size
 # shuffle before each retrieval of a batch.
 train_loader = DataLoader(dataset=train_data, batch_size=batch_size,
-                          shuffle=True)
+                          shuffle=True, num_workers=2)
 test_loader = DataLoader(dataset=test_data, batch_size=batch_size,
-                         shuffle=True)
+                         shuffle=True, num_workers=2)
 
 # The classes: each image belongs to one and only one
 # of these classes.
