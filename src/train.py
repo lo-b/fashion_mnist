@@ -7,8 +7,8 @@ from src.data import train_loader
 from src.helpers import plot_classes_preds
 
 
-def train(criterion, optimizer, n_epochs, net, device):
-    writer = SummaryWriter()
+def train(criterion, optimizer, n_epochs, net, device, writer):
+
     writer.add_graph(net, next(iter(train_loader))[0])
 
     running_loss = 0.0
