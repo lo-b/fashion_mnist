@@ -4,6 +4,8 @@ from torch.utils.tensorboard import SummaryWriter
 from src.data import train_loader
 
 # Train on cpu or gpu if available
+from src.helpers import plot_classes_preds
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
@@ -11,15 +13,19 @@ def train(criterion, optimizer, n_epochs, net):
 
     writer = SummaryWriter()
     writer.add_graph(net, next(iter(train_loader))[0])
-    count = 0
+
+    running_loss = 0.0
     # An epoch is a complete pass thru a dataset
     for epoch in range(n_epochs):
 
         # Transfer model to cpu / gpu -- whichever is available
         net.to(device)
 
-        # Get a batch of data
-        for batch_index, data in enumerate(train_loader):
+        # Get a batch of data, use enumerate to iterate
+        # over the trainloader; each iteration in the for-loop
+        # gives us a batch of images and their labels and a counter `i`
+        # which starts at 0
+        for i, data in enumerate(train_loader, start=0):
             images, labels = data
 
             # transfer images and labels to device
@@ -41,8 +47,23 @@ def train(criterion, optimizer, n_epochs, net):
             # Update the gradients
             optimizer.step()
 
-            writer.add_scalar('Loss/Train', loss, count)
+            running_loss += loss.item()
 
-            count += 1
+            if i % 100 == 99:  # i.e. every hundred mini-batches
+
+                # log running loss:
+                writer.add_scalar('training loss', running_loss / 100,
+                                  epoch * len(train_loader) + i)
+                net.to('cpu')
+                images = images.to('cpu')
+                labels = labels.to('cpu')
+                # ...log a Matplotlib Figure showing the model's predictions on a
+                # random mini-batch
+                writer.add_figure('predictions vs. actuals',
+                                  plot_classes_preds(net, images[:4],
+                                                     labels[:4]),
+                                  global_step=epoch * len(train_loader) + i)
+                running_loss = 0.0
+                net.to(device)
 
     print('Finished training')
