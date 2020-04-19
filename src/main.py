@@ -21,7 +21,6 @@ write_images()
 # works well.
 criterion = nn.CrossEntropyLoss()
 
-
 # Define learning rate `alpha`
 alpha = 0.01
 
