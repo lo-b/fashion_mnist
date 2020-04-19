@@ -9,12 +9,8 @@ from torch.utils.tensorboard import SummaryWriter
 from src.data import train_data, classes
 from src.helpers import select_n_random
 
-# Writer object to interact with TensorBoard
-log_dir = "runs/fashion_mnist"
-writer = SummaryWriter()
 
-
-def write_images():
+def write_images(writer):
     # import DataLoader
     from src.data import train_loader
 
@@ -30,7 +26,7 @@ def write_images():
     writer.close()
 
 
-def write_embedding():
+def write_embedding(writer):
     """
     Visualize dataset in higher 3D space for exploration
     """
