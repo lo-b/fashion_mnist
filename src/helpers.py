@@ -41,6 +41,7 @@ def images_to_probs(net, images):
     Generates predictions and corresponding probabilities from a trained
     network and a list of images
     """
+    net.to('cpu')
     output = net(images)
     # convert output probabilities to predicted class
     _, preds_tensor = torch.max(output, 1)
@@ -57,6 +58,7 @@ def plot_classes_preds(net, images, labels):
     information based on whether the prediction was correct or not.
     Uses the "images_to_probs" function.
     """
+    net.to('cpu')
     preds, probs = images_to_probs(net, images)
     # plot the images in the batch, along with predicted and true labels
     fig = plt.figure(figsize=(12, 48))
