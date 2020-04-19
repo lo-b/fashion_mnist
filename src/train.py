@@ -6,15 +6,13 @@ from src.data import train_loader
 # Train on cpu or gpu if available
 from src.helpers import plot_classes_preds
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-
-def train(criterion, optimizer, n_epochs, net):
-
+def train(criterion, optimizer, n_epochs, net, device):
     writer = SummaryWriter()
     writer.add_graph(net, next(iter(train_loader))[0])
 
     running_loss = 0.0
+    n_correct = 0
     # An epoch is a complete pass thru a dataset
     for epoch in range(n_epochs):
 
@@ -49,21 +47,21 @@ def train(criterion, optimizer, n_epochs, net):
 
             running_loss += loss.item()
 
+            # Make a matrix of the predictions
+            _, predicted = torch.max(output.data, 1)
+            n_correct += (predicted == labels).sum().item()
             if i % 100 == 99:  # i.e. every hundred mini-batches
 
-                # log running loss:
-                writer.add_scalar('training loss', running_loss / 100,
-                                  epoch * len(train_loader) + i)
-                net.to('cpu')
-                images = images.to('cpu')
-                labels = labels.to('cpu')
-                # ...log a Matplotlib Figure showing the model's predictions on a
-                # random mini-batch
-                writer.add_figure('predictions vs. actuals',
-                                  plot_classes_preds(net, images[:4],
-                                                     labels[:4]),
-                                  global_step=epoch * len(train_loader) + i)
+                # calulate mean vals and add to tensorboard
+                writer.add_scalar('Training/Loss', running_loss / 100, epoch *
+                                  len(train_loader) + i)
+
+                writer.add_scalar('Training/accuracy', n_correct / 100,
+                                  epoch *
+                                  len(train_loader) + i)
+
+                writer.close()
                 running_loss = 0.0
-                net.to(device)
+                n_correct = 0
 
     print('Finished training')
