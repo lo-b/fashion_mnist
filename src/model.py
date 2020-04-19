@@ -36,12 +36,14 @@ class Net(nn.Module):
         # so it's output shape will be (batch_size, 10, 13, 13)
         self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)
 
+        # Second convolutional layer
+        self.conv2 = nn.Conv2d(10, 32, 3)
+
         # A fully connected layer to all our classes (which there were 10 of)
-        self.fc1 = nn.Linear(in_features=13 * 13 * 10, out_features=10)
+        self.fc1 = nn.Linear(in_features=5 * 5 * 32, out_features=10)
 
     # Feed forward behaviour of the network
     def forward(self, x):
-
         # Feed it thru the convolutional layer
         x = self.conv1(x)
 
@@ -49,6 +51,14 @@ class Net(nn.Module):
         x = F.relu(x)
 
         # Feed it thru the MaxPooling layer
+        # It's output will be in shape (batch_size, 10, 13, 13)
+        x = self.maxpool1(x)
+
+        x = self.conv2(x)
+
+        x = F.relu(x)
+
+        # We will use the same maxpool layer used after conv1
         x = self.maxpool1(x)
 
         # Flatten the output from the MaxPooling layer
