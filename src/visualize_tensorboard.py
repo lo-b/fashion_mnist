@@ -10,6 +10,7 @@ from src.data import train_data, classes
 from src.helpers import select_n_random
 
 # Writer object to interact with TensorBoard
+log_dir = "runs/fashion_mnist"
 writer = SummaryWriter()
 
 
