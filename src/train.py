@@ -7,16 +7,15 @@ from src.helpers import plot_classes_preds
 
 
 def train(criterion, optimizer, n_epochs, net, device, writer):
-
     writer.add_graph(net, next(iter(train_loader))[0])
 
+    # Transfer model to cpu / gpu -- whichever is available
+    net.to(device)
+
     running_loss = 0.0
-    n_correct = 0
+    running_correct = 0.0
     # An epoch is a complete pass thru a dataset
     for epoch in range(n_epochs):
-
-        # Transfer model to cpu / gpu -- whichever is available
-        net.to(device)
 
         # Get a batch of data, use enumerate to iterate
         # over the trainloader; each iteration in the for-loop
@@ -33,7 +32,7 @@ def train(criterion, optimizer, n_epochs, net, device, writer):
             optimizer.zero_grad()
 
             # Do a forward pass thru the network
-            output = net.forward(images)
+            output = net(images)
 
             # Calculate the loss
             loss = criterion(output, labels)
@@ -45,22 +44,37 @@ def train(criterion, optimizer, n_epochs, net, device, writer):
             optimizer.step()
 
             running_loss += loss.item()
-
             # Make a matrix of the predictions
-            _, predicted = torch.max(output.data, 1)
-            n_correct += (predicted == labels).sum().item()
-            if i % 100 == 99:  # i.e. every hundred mini-batches
+            _, predicted = torch.max(torch.exp(output.data), dim=1)
+            running_correct += (predicted == labels).sum().item()
+            if (i + 1) % 100 == 0:  # i.e. every hundred mini-batches
+                print('Epoch: {}, Batch: {}, Avg. Loss: {}, Accuracy: {}'
+                      .format(
+                    epoch + 1,
+                    i + 1,
+                    running_loss / 100,
+                    (running_correct / 2000),
+                ))
 
+                # Accruacy:
+                # Hoeveel goed / totaal
                 # calulate mean vals and add to tensorboard
-                writer.add_scalar('Training/Loss', running_loss / 100, epoch *
-                                  len(train_loader) + i)
+                writer.add_scalar(
+                    'Training/Loss',
+                    running_loss / 100,
+                    epoch * len(train_loader) + i
+                )
 
-                writer.add_scalar('Training/accuracy', n_correct / 100,
-                                  epoch *
-                                  len(train_loader) + i)
+                writer.close()
+
+                writer.add_scalar(
+                    'Training/accuracy',
+                    running_correct / (20 * 100),
+                    epoch * len(train_loader) + i
+                )
 
                 writer.close()
                 running_loss = 0.0
-                n_correct = 0
+                running_correct = 0
 
     print('Finished training')

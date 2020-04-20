@@ -10,10 +10,10 @@ from src.train import train
 from src.visualize_tensorboard import write_images
 
 # Define learning rate `alpha`
-alpha = 0.005
+alpha = 0.001
 
 # Number of epochs
-n_epochs = 1
+n_epochs = 20
 
 # Define momentum
 momentum = 0.9
@@ -21,7 +21,7 @@ momentum = 0.9
 comment = 'n_epochs={}_alpha={:.3f}_momentum={:.3f}'.format(n_epochs, alpha,
                                                             momentum)
 
-writer = SummaryWriter(comment='n_epoch=10_lr=5e-3_momentum=9e-1')
+writer = SummaryWriter(comment=comment)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print('Device:', device)
@@ -39,7 +39,7 @@ write_images(writer)
 # Specify the loss function; for a classification
 # problem with classes a `cross entropy loss`
 # works well.
-criterion = nn.CrossEntropyLoss()
+criterion = nn.NLLLoss()
 
 
 # Specify an optimizer which will do backpropagation

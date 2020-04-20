@@ -39,15 +39,15 @@ class Net(nn.Module):
         # Second convolutional layer
         # (13-3)/1 + 1 = 11
         # Hence the output of a single image will be in shape (32, 11, 11)
-        self.conv2 = nn.Conv2d(10, 32, 3)
+        self.conv2 = nn.Conv2d(10, 20, 3)
 
         # Before the fully connected layer another MaxPooling layer is
         # applied again.
         #
         # (11-2)/2 + 1 = 9/2 + 1 = 5.5 -- rounded down this is 5;
         # So the shape of a single image is (32, 5, 5)
-         # A fully connected layer to all our classes (which there were 10 of)
-        self.fc1 = nn.Linear(in_features=5 * 5 * 32, out_features=10)
+        # A fully connected layer to all our classes (which there were 10 of)
+        self.fc1 = nn.Linear(in_features=5 * 5 * 20, out_features=10)
 
     # Feed forward behaviour of the network
     def forward(self, x):
@@ -94,6 +94,6 @@ class Net(nn.Module):
         # Since our first dimension is our batch size we want the softmax
         # to be performed over the second dimension `1` which will be the
         # values themselves.
-        x = F.softmax(x, dim=1)
+        x = F.log_softmax(x, dim=1)
 
         return x
