@@ -5,6 +5,7 @@ import torch.nn.functional as F
 
 
 def test(net, device, writer):
+
     class_labels = []
     class_preds = []
 
@@ -23,7 +24,7 @@ def test(net, device, writer):
             n_samples += labels.size(0)
             n_correct += (predicted == labels).sum().item()
 
-            probs = [F.softmax(output) for output in outputs]
+            probs = [F.softmax(output, dim=0) for output in outputs]
             class_preds.append(probs)
             class_labels.append(predicted)
 

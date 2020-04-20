@@ -17,7 +17,7 @@ train_data = FashionMNIST(root='../data', download=True,
 test_data = FashionMNIST(root='../data', train=False, download=True,
                          transform=data_transform)
 
-batch_size = 64
+batch_size = 20
 
 # Some stats about our data
 print('Number of train images:', len(train_data))

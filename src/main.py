@@ -6,12 +6,14 @@ from torch.utils.tensorboard import SummaryWriter
 from src.model import Net
 from src.test import test
 # Create the network and print it's architecture
+from src.test_udacity import test_udacity
 from src.train import train
 from src.visualize_tensorboard import write_images
 
 writer = SummaryWriter()
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device('cpu')
 
 net = Net()
 print(net)
@@ -40,3 +42,4 @@ optimizer = optim.SGD(net.parameters(), lr=alpha, momentum=0.9)
 
 train(criterion, optimizer, n_epochs, net, device, writer)
 test(net, device, writer)
+test_udacity(net, criterion, device)
