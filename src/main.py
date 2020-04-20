@@ -5,15 +5,26 @@ from torch.utils.tensorboard import SummaryWriter
 
 from src.model import Net
 from src.test import test
-# Create the network and print it's architecture
 from src.test_udacity import test_udacity
 from src.train import train
 from src.visualize_tensorboard import write_images
 
-writer = SummaryWriter()
+# Define learning rate `alpha`
+alpha = 0.005
+
+# Number of epochs
+n_epochs = 1
+
+# Define momentum
+momentum = 0.9
+
+comment = 'n_epochs={}_alpha={:.3f}_momentum={:.3f}'.format(n_epochs, alpha,
+                                                            momentum)
+
+writer = SummaryWriter(comment='n_epoch=10_lr=5e-3_momentum=9e-1')
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-device = torch.device('cpu')
+print('Device:', device)
 
 net = Net()
 print(net)
@@ -30,15 +41,10 @@ write_images(writer)
 # works well.
 criterion = nn.CrossEntropyLoss()
 
-# Define learning rate `alpha`
-alpha = 0.01
-
-# Number of epochs
-n_epochs = 2
 
 # Specify an optimizer which will do backpropagation
 # for us using autograd (a module that keeps track of a tensor's lifecycle)
-optimizer = optim.SGD(net.parameters(), lr=alpha, momentum=0.9)
+optimizer = optim.SGD(net.parameters(), lr=alpha, momentum=momentum)
 
 train(criterion, optimizer, n_epochs, net, device, writer)
 test(net, device, writer)

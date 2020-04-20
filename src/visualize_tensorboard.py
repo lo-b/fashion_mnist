@@ -4,7 +4,6 @@ our model so we can analyse it later.
 """
 
 import torchvision
-from torch.utils.tensorboard import SummaryWriter
 
 from src.data import train_data, classes
 from src.helpers import select_n_random

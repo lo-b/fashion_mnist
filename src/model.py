@@ -37,9 +37,16 @@ class Net(nn.Module):
         self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)
 
         # Second convolutional layer
+        # (13-3)/1 + 1 = 11
+        # Hence the output of a single image will be in shape (32, 11, 11)
         self.conv2 = nn.Conv2d(10, 32, 3)
 
-        # A fully connected layer to all our classes (which there were 10 of)
+        # Before the fully connected layer another MaxPooling layer is
+        # applied again.
+        #
+        # (11-2)/2 + 1 = 9/2 + 1 = 5.5 -- rounded down this is 5;
+        # So the shape of a single image is (32, 5, 5)
+         # A fully connected layer to all our classes (which there were 10 of)
         self.fc1 = nn.Linear(in_features=5 * 5 * 32, out_features=10)
 
     # Feed forward behaviour of the network
@@ -50,22 +57,32 @@ class Net(nn.Module):
         # Apply a ReLU to it
         x = F.relu(x)
 
+        # print('Shape after CONV1:', x.shape)
+
         # Feed it thru the MaxPooling layer
         # It's output will be in shape (batch_size, 10, 13, 13)
         x = self.maxpool1(x)
+
+        # print('Shape after MAXPOOL1:', x.shape)
 
         x = self.conv2(x)
 
         x = F.relu(x)
 
+        # print('Shape after CONV2:', x.shape)
+
         # We will use the same maxpool layer used after conv1
         x = self.maxpool1(x)
+
+        # print('Shape after MAXPOOL2:', x.shape)
 
         # Flatten the output from the MaxPooling layer
         # so it can be fed into the fully connected layer.
         # This transforms (batch_size, 10, 13, 13) into
         # (batch_size, 13 * 13 * 10)
         x = x.view(x.size(0), -1)
+
+        # print('Shape after RESHAPE:', x.shape)
 
         # Pass it thru the fully connected layer.
         x = self.fc1(x)
