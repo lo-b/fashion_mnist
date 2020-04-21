@@ -194,3 +194,10 @@ dmypy.json
 .pyre/
 
 # End of https://www.gitignore.io/api/python,pycharm+all
+
+
+# TensorBoard runs and data
+
+/data
+
+/runs
