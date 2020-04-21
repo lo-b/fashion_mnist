@@ -13,12 +13,13 @@ from src.visualize_tensorboard import write_images
 alpha = 0.001
 
 # Number of epochs
-n_epochs = 20
+n_epochs = 10
 
 # Define momentum
 momentum = 0.9
 
-comment = 'n_epochs={}_alpha={:.3f}_momentum={:.3f}'.format(n_epochs, alpha,
+comment = 'n_epochs={}_alpha={:.3f}_momentum={:.3f}_adam'.format(n_epochs,
+                                                                alpha,
                                                             momentum)
 
 writer = SummaryWriter(comment=comment)
@@ -44,7 +45,7 @@ criterion = nn.NLLLoss()
 
 # Specify an optimizer which will do backpropagation
 # for us using autograd (a module that keeps track of a tensor's lifecycle)
-optimizer = optim.SGD(net.parameters(), lr=alpha, momentum=momentum)
+optimizer = optim.Adam(net.parameters(), lr=alpha)
 
 train(criterion, optimizer, n_epochs, net, device, writer)
 test(net, device, writer)
