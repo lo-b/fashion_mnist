@@ -198,6 +198,8 @@ dmypy.json
 
 # TensorBoard runs and data
 
-/data
+/data/FashionMNIST/
 
-/runs
+/runs/
+
+/src/__pycache__/
