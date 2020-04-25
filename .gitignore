@@ -200,6 +200,6 @@ dmypy.json
 
 data/**
 
-runs/
+runs/**
 
 src/__pycache__/**
