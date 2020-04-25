@@ -45,7 +45,7 @@ criterion = nn.NLLLoss()
 
 # Specify an optimizer which will do backpropagation
 # for us using autograd (a module that keeps track of a tensor's lifecycle)
-optimizer = optim.Adam(net.parameters(), lr=alpha)
+optimizer = optim.Adam(net.parameters(), lr=alpha, momentum=momentum)
 
 train(criterion, optimizer, n_epochs, net, device, writer)
 test(net, device, writer)
