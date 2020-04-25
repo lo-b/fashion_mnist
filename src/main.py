@@ -16,7 +16,7 @@ alpha = 0.001
 n_epochs = 10
 
 # Define momentum
-momentum = 0.9
+momentum = 0.0
 
 comment = 'n_epochs={}_alpha={:.3f}_momentum={:.3f}_adam'.format(n_epochs,
                                                                 alpha,
@@ -45,7 +45,7 @@ criterion = nn.NLLLoss()
 
 # Specify an optimizer which will do backpropagation
 # for us using autograd (a module that keeps track of a tensor's lifecycle)
-optimizer = optim.Adam(net.parameters(), lr=alpha, momentum=momentum)
+optimizer = optim.Adam(net.parameters(), lr=alpha)
 
 train(criterion, optimizer, n_epochs, net, device, writer)
 test(net, device, writer)
