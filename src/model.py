@@ -22,8 +22,8 @@ class Net(nn.Module):
         # Using the formula above:
         # (28-3)/1 + 1 = 25/1 + 1 = 26
         # so it's output shape will be (batch_size, 10, 26, 26)
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=10,
-                               kernel_size=3, stride=1)
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=32,
+                               kernel_size=3, stride=1, padding=1)
 
         # The second layer is a MaxPooling layer. With a kernel of shape (2,2)
         # and a stride of 2. The MaxPooling layer will convolve with it's
@@ -39,7 +39,7 @@ class Net(nn.Module):
         # Second convolutional layer
         # (13-3)/1 + 1 = 11
         # Hence the output of a single image will be in shape (32, 11, 11)
-        self.conv2 = nn.Conv2d(10, 20, 3)
+        self.conv2 = nn.Conv2d(32, 64, 3, padding=1)
 
         # Before the fully connected layer another MaxPooling layer is
         # applied again.
@@ -47,7 +47,7 @@ class Net(nn.Module):
         # (11-2)/2 + 1 = 9/2 + 1 = 5.5 -- rounded down this is 5;
         # So the shape of a single image is (32, 5, 5)
         # A fully connected layer to all our classes (which there were 10 of)
-        self.fc1 = nn.Linear(in_features=5 * 5 * 20, out_features=10)
+        self.fc1 = nn.Linear(in_features=7 * 7 * 64, out_features=10)
 
     # Feed forward behaviour of the network
     def forward(self, x):
