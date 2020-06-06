@@ -204,6 +204,11 @@ runs/**
 
 src/__pycache__/**
 
+
+# Project specific stuff
+
 checkpoints/*
 
 runs/*
+
+*.png
