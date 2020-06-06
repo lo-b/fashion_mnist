@@ -203,3 +203,7 @@ data/**
 runs/**
 
 src/__pycache__/**
+
+checkpoints/*
+
+runs/*
